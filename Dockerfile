@@ -11,8 +11,3 @@ RUN chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx
 # Expose port 80 to the outside once the container has launched
 EXPOSE 80
 
-# Switch to the nginx user
-USER nginx
-
-# Use the default Nginx start command
-CMD ["nginx", "-g", "daemon off;"]
