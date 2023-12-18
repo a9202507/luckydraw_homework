@@ -153,7 +153,7 @@ function performRaffle() {
 
     // 使用Bootstrap模态框显示中奖信息
     const winnerModalBody = document.querySelector('#winnerModal .modal-body');
-    winnerModalBody.textContent = `恭喜 ${winner.name} 获得 ${currentGift.name}！`;
+    winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`;
     
     const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
     winnerModal.show();
