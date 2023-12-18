@@ -67,7 +67,7 @@ function updateAvailablePrizesList() {
         if (gift.quantity > 0) {
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item';
-            listItem.textContent = `${gift.name} (剩余数量: ${gift.quantity})`;
+            listItem.textContent = `${gift.name} (剩餘數量: ${gift.quantity})`;
             list.appendChild(listItem);
         }
     });
@@ -87,17 +87,51 @@ function updateWinnersList() {
     });
 }
 
+// raffle.js 中的 performRaffleAnimation 函数
+function performRaffleAnimation() {
+    const eligibleParticipants = Array.from(document.querySelectorAll('#eligibleParticipantsList .list-group-item'));
+    if (eligibleParticipants.length === 0) {
+        alert('沒有更多人可以參加抽獎了！');
+        return;
+    }
+
+    let current = 0;
+    const maxRounds = 30; // 总轮数，可根据需要调整
+    const intervalTime = 100; // 每个元素的高亮时长，单位为毫秒
+
+    const raffleButton = document.getElementById('startRaffle');
+    raffleButton.disabled = true; // 禁用抽奖按钮
+
+    const interval = setInterval(() => {
+        // 移除上一个参与者的高亮
+        eligibleParticipants.forEach((element) => {
+            element.classList.remove('highlight');
+        });
+
+        // 高亮当前参与者
+        eligibleParticipants[current % eligibleParticipants.length].classList.add('highlight');
+        current++;
+
+        if (current >= maxRounds) {
+            clearInterval(interval);
+            // 动画结束，随机选择中奖者
+            performRaffle();
+            raffleButton.disabled = false; // 启用抽奖按钮
+        }
+    }, intervalTime);
+}
+
 function performRaffle() {
     const eligibleParticipants = participants.filter(p => !p.hasWon);
     const currentGift = gifts.find(g => g.quantity > 0); // 找到数量大于0的第一个奖品
 
     if (eligibleParticipants.length === 0) {
-        document.getElementById('result').innerHTML = '没有更多的参与者了！';
+        document.getElementById('result').innerHTML = '沒有更多人可以參加抽獎了！';
         return;
     }
 
     if (!currentGift) {
-        document.getElementById('result').innerHTML = '所有奖品已抽完！';
+        document.getElementById('result').innerHTML = '所有獎品都抽完了！';
         return;
     }
 
@@ -117,7 +151,12 @@ function performRaffle() {
     updateAvailablePrizesList();
     updateWinnersList();
 
-    document.getElementById('result').innerHTML = `恭喜 ${winner.name} 获得 ${currentGift.name}！`;
+    // 使用Bootstrap模态框显示中奖信息
+    const winnerModalBody = document.querySelector('#winnerModal .modal-body');
+    winnerModalBody.textContent = `恭喜 ${winner.name} 获得 ${currentGift.name}！`;
+    
+    const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
+    winnerModal.show();
 }
 
 // Event listeners for file input
