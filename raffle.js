@@ -170,7 +170,7 @@ document.getElementById('giftsFile').addEventListener('change', function(event) 
 
 function downloadWinnersCSV() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `lucky_${timestamp}.csv`;
+    const filename = `Winners_${timestamp}.csv`;
     
     // UTF-8 的 BOM
     let bom = "\uFEFF";
