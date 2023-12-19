@@ -201,8 +201,12 @@ document.getElementById('giftsFile').addEventListener('change', function(event) 
 
 function downloadWinnersCSV() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `Winners_${timestamp}.csv`;
+    const main_title=document.getElementById("main_title").value
     
+    const filename = `${main_title}_Winners_${timestamp}.csv`;
+    
+    
+
     // UTF-8 的 BOM
     let bom = "\uFEFF";
     let csvContent = "data:text/csv;charset=utf-8," + bom;
@@ -223,7 +227,8 @@ function downloadWinnersCSV() {
 
 function downloadNotWinnersCSV() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `notWinner_${timestamp}.csv`;
+    const main_title=document.getElementById("main_title").value
+    const filename = `${main_title}_notWinner_${timestamp}.csv`;
     
     let bom = "\uFEFF";
     let csvContent = "data:text/csv;charset=utf-8," + bom;
