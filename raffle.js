@@ -115,34 +115,37 @@ function startRaffle() {
 
 // raffle.js 中的 performRaffleAnimation 函数
 function performRaffleAnimation() {
-    const eligibleParticipants = Array.from(document.querySelectorAll('#eligibleParticipantsList .list-group-item'));
-    if (eligibleParticipants.length === 0) {
-        alert('沒有更多人可以參加抽獎了！');
+    const eligibleParticipantsElements = document.querySelectorAll('#eligibleParticipantsList .list-group-item');
+  
+    // 检查是否有可参加抽奖的人员
+    if (eligibleParticipantsElements.length === 0) {
+        alert('没有可抽奖的参与者。');
         return;
     }
-
-    let current = 0;
-    const maxRounds = 30; // 总轮数，可根据需要调整
-    const intervalTime = 100; // 每个元素的高亮时长，单位为毫秒
-
+    
+    let currentIndex = 0; // 当前高亮的参与者索引
+    const maxRounds = 30; // 动画重复的次数
+    const intervalTime = 100000; // 切换高亮的时间间隔（毫秒）
+    
+    // 禁用“开始抽奖”按钮
     const raffleButton = document.getElementById('startRaffle');
-    raffleButton.disabled = true; // 禁用抽奖按钮
-
-    const interval = setInterval(() => {
-        // 移除上一个参与者的高亮
-        eligibleParticipants.forEach((element) => {
+    raffleButton.disabled = true;
+    
+    const intervalId = setInterval(() => {
+        // 移除所有参与者的高亮
+        eligibleParticipantsElements.forEach((element, index) => {
             element.classList.remove('highlight');
         });
-
-        // 高亮当前参与者
-        eligibleParticipants[current % eligibleParticipants.length].classList.add('highlight');
-        current++;
-
-        if (current >= maxRounds) {
-            clearInterval(interval);
-            // 动画结束，随机选择中奖者
-            performRaffle();
-            raffleButton.disabled = false; // 启用抽奖按钮
+        
+        // 高亮下一个参与者
+        eligibleParticipantsElements[currentIndex % eligibleParticipantsElements.length].classList.add('highlight');
+        
+        currentIndex++;
+        
+        // 如果已达到最大轮数，则停止动画，并进行抽奖
+        if (currentIndex >= maxRounds) {
+            clearInterval(intervalId);
+            performRaffle(); // 执行抽奖
         }
     }, intervalTime);
 }
@@ -183,6 +186,8 @@ function performRaffle() {
     
     const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
     winnerModal.show();
+	// 抽奖结束后，重新启用“开始抽奖”按钮
+    document.getElementById('startRaffle').disabled = false;
 }
 
 // Event listeners for file input
@@ -239,7 +244,22 @@ function downloadNotWinnersCSV() {
     document.body.removeChild(link);
 }
 
-document.getElementById('downloadNotWinnersCSV').addEventListener('click', downloadNotWinnersCSV);
 
+// 为上传人员名单的 input 元素添加 change 事件监听器
+document.getElementById('namesFile').addEventListener('change', function(event) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+        // 获取文件名
+        const fileName = input.files[0].name;
+        
+        // 更新网页标题
+        document.title = fileName;
+
+        // 继续执行文件读取的其他逻辑
+        readFile(input, false);
+    }
+});
+
+document.getElementById('downloadNotWinnersCSV').addEventListener('click', downloadNotWinnersCSV);
+document.getElementById('startRaffle').addEventListener('click', performRaffleAnimation);
 // Expose the raffle function to the global scope
-document.getElementById('startRaffle').addEventListener('click', startRaffle);
