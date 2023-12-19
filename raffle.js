@@ -87,6 +87,32 @@ function updateWinnersList() {
     });
 }
 
+
+function startRaffle() {
+    // 检查是否已经上传了参与者名单和奖品清单
+    if (participants.length === 0 || gifts.length === 0) {
+        // 获取错误提示模态框元素
+        const errorModalElement = document.getElementById('errorModal');
+        const errorModalMessageElement = document.getElementById('errorModalMessage');
+
+        // 设置错误信息
+        if (participants.length === 0 && gifts.length === 0) {
+            errorModalMessageElement.textContent = '需先上傳人員名單和獎品清單。';
+        } else if (participants.length === 0) {
+            errorModalMessageElement.textContent = '需先上傳人員名單。';
+        } else if (gifts.length === 0) {
+            errorModalMessageElement.textContent = '需先上傳獎品清單。';
+        }
+
+        // 显示错误提示模态框
+        const errorModal = new bootstrap.Modal(errorModalElement);
+        errorModal.show();
+    } else {
+        // 如果都已上传，则执行抽奖
+        performRaffle();
+    }
+}
+
 // raffle.js 中的 performRaffleAnimation 函数
 function performRaffleAnimation() {
     const eligibleParticipants = Array.from(document.querySelectorAll('#eligibleParticipantsList .list-group-item'));
@@ -216,4 +242,4 @@ function downloadNotWinnersCSV() {
 document.getElementById('downloadNotWinnersCSV').addEventListener('click', downloadNotWinnersCSV);
 
 // Expose the raffle function to the global scope
-window.startRaffle = performRaffle;
+document.getElementById('startRaffle').addEventListener('click', startRaffle);
