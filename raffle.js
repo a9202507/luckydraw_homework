@@ -117,7 +117,7 @@ function startRaffle() {
 function performRaffle() {
 
     document.getElementById("startRaffle-button").disabled = true;
-
+    document.getElementById("randomSorting-button").disabled = true;
 
     const eligibleParticipants = participants.filter(p => !p.hasWon);
     const currentGift = gifts.find(g => g.quantity > 0); // 找到数量大于0的第一个奖品
@@ -187,7 +187,7 @@ function handleStoppedHighlighting(currentIndex) {
     const eligibleParticipants = participants.filter(p => !p.hasWon);
     const currentGift = gifts.find(g => g.quantity > 0);
     var eligibleParticipantsElements = document.getElementById('eligibleParticipantsList').children;
-    eligibleParticipantsElements[currentIndex].style.backgroundColor = 'green';
+    eligibleParticipantsElements[currentIndex].style.backgroundColor = 'orange';
     var winner = eligibleParticipants[currentIndex]
     const winnerModalBody = document.querySelector('#winnerModal .modal-body');
     winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`;
@@ -245,6 +245,8 @@ function downloadWinnersCSV() {
 function confirmRaffle(){
     document.getElementById("startRaffle-button").disabled = false;
     document.getElementById("confirmRaffle-button").disabled = true;
+    document.getElementById("randomSorting-button").disabled = false;
+    
     updateEligibleParticipantsList();
     updateAvailablePrizesList();
     updateWinnersList();
@@ -274,6 +276,37 @@ function downloadNotWinnersCSV() {
     document.body.removeChild(link);
 }
 
+
+function sortListByName() {
+    //updateEligibleParticipantsList()
+    participants.sort(function(a, b) {
+        return Math.random() > 0.5 ? -1 : 1;
+       });
+
+    updateEligibleParticipantsList()
+
+    /*
+    // Get the list items
+    const list = document.getElementById('eligibleParticipantsList');
+    let listItems = list.getElementsByTagName('li');
+
+    // Convert the HTMLCollection to an array for sorting
+    listItems = Array.from(listItems);
+
+    // Sort the array of list items based on the text content, which has the participant's name
+    listItems.sort(function(a, b) {
+        return Math.random() > 0.5 ? -1 : 1;
+       });
+
+    
+    // Append each sorted item back to the list
+    listItems.forEach(function(item) {
+        list.appendChild(item);
+    });
+
+    */    
+}
 document.getElementById('downloadNotWinnersCSV').addEventListener('click', downloadNotWinnersCSV);
 document.getElementById('confirmRaffle-button').addEventListener('click', confirmRaffle);
+document.getElementById('randomSorting-button').addEventListener('click', sortListByName);
 // Expose the raffle function to the global scope
