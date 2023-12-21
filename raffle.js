@@ -6,6 +6,7 @@ let winners = [];
 function readFile(input, isGift) {
     const file = input.files[0];
     const reader = new FileReader();
+    document.getElementById("confirmRaffle-button").disabled = true;
 
     reader.onload = function(event) {
         const text = event.target.result;
@@ -113,46 +114,36 @@ function startRaffle() {
     }
 }
 
-// raffle.js 中的 performRaffleAnimation 函数
-function performRaffleAnimation() {
-    const eligibleParticipantsElements = document.querySelectorAll('#eligibleParticipantsList .list-group-item');
-  
-    // 检查是否有可参加抽奖的人员
-    if (eligibleParticipantsElements.length === 0) {
-        alert('没有可抽奖的参与者。');
-        return;
-    }
-    
-    let currentIndex = 0; // 当前高亮的参与者索引
-    const maxRounds = 30; // 动画重复的次数
-    const intervalTime = 100000; // 切换高亮的时间间隔（毫秒）
-    
-    // 禁用“开始抽奖”按钮
-    const raffleButton = document.getElementById('startRaffle');
-    raffleButton.disabled = true;
-    
-    const intervalId = setInterval(() => {
-        // 移除所有参与者的高亮
-        eligibleParticipantsElements.forEach((element, index) => {
-            element.classList.remove('highlight');
-        });
-        
-        // 高亮下一个参与者
-        eligibleParticipantsElements[currentIndex % eligibleParticipantsElements.length].classList.add('highlight');
-        
-        currentIndex++;
-        
-        // 如果已达到最大轮数，则停止动画，并进行抽奖
-        if (currentIndex >= maxRounds) {
-            clearInterval(intervalId);
-            performRaffle(); // 执行抽奖
-        }
-    }, intervalTime);
-}
-
 function performRaffle() {
+
+    document.getElementById("startRaffle-button").disabled = true;
+
+
     const eligibleParticipants = participants.filter(p => !p.hasWon);
     const currentGift = gifts.find(g => g.quantity > 0); // 找到数量大于0的第一个奖品
+    /* const eligibleParticipantsElements = document.querySelectorAll('#eligibleParticipantsList .list-group-item'); */
+    var eligibleParticipantsElements = document.getElementById('eligibleParticipantsList').children;
+    var index = 0;
+
+    //對人員列表，輪流高亮  
+    const intervalId = setInterval(function() {
+        index = (index + 1) %  eligibleParticipantsElements.length;
+        for (var i = 0; i < eligibleParticipantsElements.length; i++) {
+            eligibleParticipantsElements[i].style.backgroundColor = (i === index) ? 'yellow' : '';
+        }
+        
+    }, 100);
+
+    // 生成3到7秒之間的隨機時間
+    const during_time = Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000;
+
+    // 在during_time之前的某个时刻减慢速度
+    const slowDownTime = during_time - 1000; // 减慢速度的时间点
+
+    setTimeout(() => {
+        clearInterval(intervalId); // 停止間隔
+        handleStoppedHighlighting(index); // 輸出當前的人員index，或者可以調用其他函數來處理這個index
+    }, during_time);
 
     if (eligibleParticipants.length === 0) {
         document.getElementById('result').innerHTML = '沒有更多人可以參加抽獎了！';
@@ -164,8 +155,45 @@ function performRaffle() {
         return;
     }
 
-    const participantIndex = Math.floor(Math.random() * eligibleParticipants.length);
-    const winner = eligibleParticipants[participantIndex];
+    //const participantIndex = Math.floor(Math.random() * eligibleParticipants.length);
+    //const winner = eligibleParticipants[participantIndex];
+    //const winner = eligibleParticipants[index];
+
+    /*
+    winner.hasWon = true;
+    currentGift.quantity -= 1; // 减少当前奖品的数量
+    const timestamp = new Date().toLocaleString();
+    winners.push({ 
+        name: winner.name, 
+        prize: currentGift.name, 
+        timestamp: timestamp 
+    });
+    */
+    
+
+    // 使用Bootstrap模态框显示中奖信息
+    /*
+    const winnerModalBody = document.querySelector('#winnerModal .modal-body');
+    winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`;
+    
+    const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
+    winnerModal.show();
+    */
+}
+
+
+function handleStoppedHighlighting(currentIndex) {
+    // 在这里编写处理逻辑
+    const eligibleParticipants = participants.filter(p => !p.hasWon);
+    const currentGift = gifts.find(g => g.quantity > 0);
+    var eligibleParticipantsElements = document.getElementById('eligibleParticipantsList').children;
+    eligibleParticipantsElements[currentIndex].style.backgroundColor = 'green';
+    var winner = eligibleParticipants[currentIndex]
+    const winnerModalBody = document.querySelector('#winnerModal .modal-body');
+    winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`;
+    
+    const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
+    winnerModal.show();
 
     winner.hasWon = true;
     currentGift.quantity -= 1; // 减少当前奖品的数量
@@ -176,18 +204,8 @@ function performRaffle() {
         timestamp: timestamp 
     });
 
-    updateEligibleParticipantsList();
-    updateAvailablePrizesList();
-    updateWinnersList();
-
-    // 使用Bootstrap模态框显示中奖信息
-    const winnerModalBody = document.querySelector('#winnerModal .modal-body');
-    winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`;
-    
-    const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
-    winnerModal.show();
-	// 抽奖结束后，重新启用“开始抽奖”按钮
-    document.getElementById('startRaffle').disabled = false;
+    //啟動confirm 按鈕
+    document.getElementById("confirmRaffle-button").disabled = false;
 }
 
 // Event listeners for file input
@@ -203,8 +221,7 @@ function downloadWinnersCSV() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const main_title=document.getElementById("main_title").value
     
-    const filename = `${main_title}_Winners_${timestamp}.csv`;
-    
+    const filename = `${main_title}_Winners_${timestamp}.csv`; 
     
 
     // UTF-8 的 BOM
@@ -223,6 +240,14 @@ function downloadWinnersCSV() {
 
     link.click();
     document.body.removeChild(link);
+}
+
+function confirmRaffle(){
+    document.getElementById("startRaffle-button").disabled = false;
+    document.getElementById("confirmRaffle-button").disabled = true;
+    updateEligibleParticipantsList();
+    updateAvailablePrizesList();
+    updateWinnersList();
 }
 
 function downloadNotWinnersCSV() {
@@ -249,22 +274,6 @@ function downloadNotWinnersCSV() {
     document.body.removeChild(link);
 }
 
-
-// 为上传人员名单的 input 元素添加 change 事件监听器
-document.getElementById('namesFile').addEventListener('change', function(event) {
-    const input = event.target;
-    if (input.files && input.files[0]) {
-        // 获取文件名
-        const fileName = input.files[0].name;
-        
-        // 更新网页标题
-        document.title = fileName;
-
-        // 继续执行文件读取的其他逻辑
-        readFile(input, false);
-    }
-});
-
 document.getElementById('downloadNotWinnersCSV').addEventListener('click', downloadNotWinnersCSV);
-document.getElementById('startRaffle').addEventListener('click', performRaffleAnimation);
+document.getElementById('confirmRaffle-button').addEventListener('click', confirmRaffle);
 // Expose the raffle function to the global scope

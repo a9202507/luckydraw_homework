@@ -60,7 +60,8 @@
             <input type="file" class="form-control" id="giftsFile" accept=".csv">
         </div>
         
-        <button onclick="startRaffle()" class="btn btn-primary">開始抽獎</button>
+        <button onclick="startRaffle()" class="btn btn-primary" id="startRaffle-button">開始抽獎</button>
+        <button onclick="confirmRaffle()" class="btn btn-success" id="confirmRaffle-button">確認</button>
         <div id="result" class="mt-3"></div>
         </div>
     </div>
@@ -149,7 +150,7 @@
 </div>
 <!-- 页脚 -->
 <footer class="text-center mt-auto py-4 bg-light">
-    <p>&copy; 2023 lucky draw Rev 0.1.5</p>
+    <p>&copy; 2023 lucky draw Rev 0.1.7</p>
 </footer>
 
 <!-- 引入 Bootstrap 的 JavaScript 和 Popper.js -->
