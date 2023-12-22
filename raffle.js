@@ -2,6 +2,7 @@
 let participants = [];
 let gifts = [];
 let winners = [];
+var total_winner=0;
 
 function readFile(input, isGift) {
     const file = input.files[0];
@@ -63,6 +64,7 @@ function updateEligibleParticipantsList() {
 
 function updateAvailablePrizesList() {
     const list = document.getElementById('availablePrizesList');
+    var gift_total=0;
     list.innerHTML = '';
     gifts.forEach(gift => {
         if (gift.quantity > 0) {
@@ -70,12 +72,15 @@ function updateAvailablePrizesList() {
             listItem.className = 'list-group-item';
             listItem.textContent = `${gift.name} (剩餘數量: ${gift.quantity})`;
             list.appendChild(listItem);
+            gift_total=gift_total+gift.quantity;
         }
     });
+    document.getElementById('totalPrizes').textContent = gift_total;
 }
 
 function updateWinnersList() {
     const tableBody = document.getElementById('winnersList').querySelector('tbody');
+    
     tableBody.innerHTML = '';
     winners.forEach(winner => {
         const row = tableBody.insertRow();
@@ -85,7 +90,9 @@ function updateWinnersList() {
         nameCell.textContent = winner.name;
         prizeCell.textContent = winner.prize;
         timestampCell.textContent = winner.timestamp;  // 显示时间戳
+        
     });
+    
 }
 
 
@@ -179,6 +186,8 @@ function performRaffle() {
     const winnerModal = new bootstrap.Modal(document.getElementById('winnerModal'));
     winnerModal.show();
     */
+    total_winner++;
+    
 }
 
 
@@ -250,6 +259,8 @@ function confirmRaffle(){
     updateEligibleParticipantsList();
     updateAvailablePrizesList();
     updateWinnersList();
+
+    document.getElementById('totalWinner').textContent = total_winner;
 }
 
 function downloadNotWinnersCSV() {

@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>抽獎程式</title>
+    <title>Lucky Draw Rev 0.2.1</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 
@@ -27,6 +27,10 @@
           height: 4rem; /* Footer's height */
           background: #f5f5f5; /* Footer's background */
           line-height: 4rem; /* Center the text vertically */
+        }
+        .right-group 
+        {
+        float: right;
         }
 
         .highlight {
@@ -59,12 +63,18 @@
             <label for="giftsFile" class="form-label">請上傳獎品清單 (gift.csv):</label>
             <input type="file" class="form-control" id="giftsFile" accept=".csv">
         </div>
-        <button id="randomSorting-button" class="btn btn-warning">洗牌</button>
-        <button onclick="startRaffle()" class="btn btn-primary" id="startRaffle-button">開始抽獎</button>
-        <button onclick="confirmRaffle()" class="btn btn-success" id="confirmRaffle-button">確認</button>
+        <button id="randomSorting-button" class="btn btn-lg btn-warning">洗牌</button>
+        <button onclick="startRaffle()" class="btn btn-lg btn-primary" id="startRaffle-button">開始抽獎</button>
+        <button onclick="confirmRaffle()" class="btn btn-lg btn btn-success" id="confirmRaffle-button">確認</button>
+        <!-- 下載未中獎人員名單的按钮 -->
+
+        <div class="right-group">
+        <button id="downloadNotWinnersCSV" class="btn btn-info">下載未中獎人員名單</button>
+        <button id="downloadCSV" onclick="downloadWinnersCSV()" class="btn btn-info">下載中獎名單</button>
+        </div>
         <div id="result" class="mt-3"></div>
         </div>
-    </div>
+    
 
     <!-- 剩餘部分保持原樣 -->
 <!-- 错误提示模态框 -->
@@ -105,23 +115,26 @@
 
 <div class="container">
     <div class="row">
-        <!-- 可参加抽奖的人员清单 -->
+        
         <!-- 可参加抽奖的人员名单 -->
         <div class="col-md-4">
             <h2>可參加抽獎人員</h2>
+            
             <div>總人數: <span id="totalParticipants">0</span></div>
             <ul id="eligibleParticipantsList" class="list-group">
                 <!-- 通过 JavaScript 动态填充 -->
             </ul>
-            <!-- 下载未中奖人员名单的按钮放在这里 -->
-            <button id="downloadNotWinnersCSV" class="btn btn-info mt-3">下載未中獎人員名單</button>
             
+            <!-- 下載未中獎人員名單的按钮 -->
+            <!-- <button id="downloadNotWinnersCSV" class="btn btn-info mt-3">下載未中獎人員名單</button> -->
+                       
         </div>
         
 
         <!-- 未开出奖项 -->
         <div class="col-md-4">
             <h2>未開出獎項</h2>
+            <div>總數量: <span id="totalPrizes">0</span></div>
             <ul id="availablePrizesList" class="list-group">
                 <!-- 通过 JavaScript 动态填充 -->
             </ul>
@@ -131,6 +144,7 @@
         <!-- 历史中奖记录 -->
     <div class="col-md-4">
         <h2>歷史中獎記錄</h2>
+        <div>總人數: <span id="totalWinner">0</span></div>
         <table id="winnersList" class="table">
             <thead class="table-dark">
                 <tr>
@@ -143,7 +157,7 @@
                 <!-- 通过 JavaScript 动态填充 -->
             </tbody>
         </table>
-        <button id="downloadCSV" onclick="downloadWinnersCSV()" class="btn btn-info">下載中獎名單</button>
+        <!-- <button id="downloadCSV" onclick="downloadWinnersCSV()" class="btn btn-info">下載中獎名單</button> -->
     </div>
 	
 	
@@ -151,7 +165,10 @@
 </div>
 <!-- 页脚 -->
 <footer class="text-center mt-auto py-4 bg-light">
-    <p>&copy; 2023 lucky draw Rev 0.2</p>
+    <a></a>&copy; 2023 lucky draw, </a>
+    <!-- <a href="http://www.infineon.com">Source code</a> -->
+    <a>Source code</a>
+    
 </footer>
 
 <!-- 引入 Bootstrap 的 JavaScript 和 Popper.js -->
