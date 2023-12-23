@@ -2,31 +2,29 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Lucky Draw Rev 0.2.3</title>
+    <title>Lucky Draw Rev 0.3</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 
     <style>
-        /* 其他样式 */
-      
+             
         html, body {
           height: 100%;
           margin: 0;
         }
         #content {
           min-height: 100%;
-          /* Equal to footer's height */
           margin-bottom: -4rem; 
         }
         #content:after {
           content: "";
           display: block;
-          height: 4rem; /* Equal to footer's height */
+          height: 4rem; 
         }
         footer {
-          height: 4rem; /* Footer's height */
-          background: #f5f5f5; /* Footer's background */
-          line-height: 4rem; /* Center the text vertically */
+          height: 4rem; 
+          background: #f5f5f5; 
+          line-height: 4rem; 
         }
         .right-group 
         {
@@ -34,25 +32,25 @@
         }
 
         .highlight {
-          background-color: #ff0; /* 或其他您选择的颜色 */
+          background-color: #ff0; 
           transition: background-color 0.5s ease-in-out;
         }
 
         .responsive-input {
-          width: 100%; /* 使輸入欄位寬度自動適應容器寬度 */
-          max-width: 800px; /* 可以設定一個最大寬度 */
-          font-size: 42px; /* 字體大小 */
-          text-align: center; /* 文字置中 */
-          box-sizing: border-box; /* 邊框和內填充的大小也包含在width內 */
+          width: 100%;                                                    /* 使輸入欄位寬度自動適應容器寬度 */
+          max-width: 800px;                                               /* 可以設定一個最大寬度 */
+          font-size: 42px;                                                /* 字體大小 */
+          text-align: center;                                             /* 文字置中 */
+          box-sizing: border-box;                                         /* 邊框和內填充的大小也包含在width內 */
         }
 
         .text-center {
-          text-align: center; /* 置中form */
+          text-align: center;                                             /* 置中form */
         }
 
         @media (max-width: 768px) {
           .responsive-input {
-            font-size: 24px; /* 小屏幕時降低字體大小 */
+            font-size: 24px;                                              /* 小屏幕時降低字體大小 */
           }
         }
       </style>
@@ -71,7 +69,6 @@
               <input id="main_title" class="responsive-input" type="text" name="欄位名稱" placeholder="請輸入活動標題" aria-label="請輸入活動標題" value="Lucky Draw 請輸入活動標題">
             </form>
        
-              <!--<h1 class="text-center mb-4">Lucky Draw app 抽獎應用程式</h1> -->
 		
         <div id="content"></div>
         <div class="mb-3">
@@ -86,7 +83,7 @@
         <button id="randomSorting-button" class="btn btn-lg btn-warning">洗牌</button>
         <button onclick="startRaffle()" class="btn btn-lg btn-primary" id="startRaffle-button">開始抽獎</button>
         <button onclick="confirmRaffle()" class="btn btn-lg btn btn-success" id="confirmRaffle-button">確認</button>
-        <!-- 下載未中獎人員名單的按钮 -->
+        
 
         <div class="right-group">
         <button id="downloadNotWinnersCSV" class="btn btn-info">下載未中獎人員名單</button>
@@ -96,8 +93,7 @@
         </div>
     
 
-    <!-- 剩餘部分保持原樣 -->
-<!-- 错误提示模态框 -->
+<!-- 錯誤提示彈出視窗 -->
 <div class="modal" tabindex="-1" id="errorModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -115,7 +111,7 @@
   </div>
 </div>
 
-    <!-- 模态框（Modal） -->
+<!-- 中獎提示彈出視窗 -->
 <div class="modal fade" id="winnerModal" tabindex="-1" aria-labelledby="winnerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -124,7 +120,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!-- 中奖信息将被动态插入这里 -->
+          <!-- 中獎資訊獎動態填入此處 -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -142,26 +138,22 @@
             
             <div>尚未中獎人數: <span id="totalParticipants">0</span></div>
             <ul id="eligibleParticipantsList" class="list-group">
-                <!-- 通过 JavaScript 动态填充 -->
+                <!-- 通過JS動態填充 -->
             </ul>
-            
-            <!-- 下載未中獎人員名單的按钮 -->
-            <!-- <button id="downloadNotWinnersCSV" class="btn btn-info mt-3">下載未中獎人員名單</button> -->
-                       
+                                  
         </div>
         
 
-        <!-- 未开出奖项 -->
+        <!-- 未開出獎項 -->
         <div class="col-md-4">
             <h2>未開出獎項</h2>
             <div>剩餘數量: <span id="totalPrizes">0</span></div>
             <ul id="availablePrizesList" class="list-group">
-                <!-- 通过 JavaScript 动态填充 -->
+                <!-- 通過JS動態填充 -->
             </ul>
         </div>
-
-        <!-- 历史中奖记录 -->
-        <!-- 历史中奖记录 -->
+        
+        <!-- 歷史中獎記錄 -->
     <div class="col-md-4">
         <h2>歷史中獎記錄</h2>
         <div>中獎總人數: <span id="totalWinner">0</span></div>
@@ -174,24 +166,21 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- 通过 JavaScript 动态填充 -->
+                <!-- 通過JS動態填充 -->
             </tbody>
         </table>
-        <!-- <button id="downloadCSV" onclick="downloadWinnersCSV()" class="btn btn-info">下載中獎名單</button> -->
     </div>
 	
 	
     </div>
 </div>
-<!-- 页脚 -->
+<!-- 頁脚 -->
 <footer class="text-center mt-auto py-4 bg-light">
     <a></a>&copy; 2023 lucky draw, </a>
-    <!-- <a href="http://www.infineon.com">Source code</a> -->
-    <a>Source code</a>
-    
+    <a href="https://github.com/a9202507/luckydraw_homework">Source code</a>
 </footer>
 
-<!-- 引入 Bootstrap 的 JavaScript 和 Popper.js -->
+<!-- 引入 Bootstrap 的 JavaScript 和 raffle.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="raffle.js"></script>
 </body>
