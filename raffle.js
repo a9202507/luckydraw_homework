@@ -115,7 +115,7 @@ function updateAvailablePrizesList() {
       //禮物數量不為零 才開始做
       const listItem = document.createElement("li"); //建立html 的清單元件(li)
       listItem.className = "list-group-item"; //並套用boostrap的樣式
-      listItem.textContent = `${gift.name} (剩餘數量: ${gift.quantity})`; //設定列表內容
+      listItem.textContent = `${gift.name} (Amount: ${gift.quantity})`; //設定列表內容
       list.appendChild(listItem); //將名單渲染到網頁上
       gift_total = gift_total + gift.quantity; //計算總共可抽數量
     }
@@ -245,7 +245,7 @@ function handleStoppedHighlighting(currentIndex) {
   winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
   const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
   //winnerModalBody.textContent = `恭喜 \n${winner.departmentName} 部門,${winner.name}獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
-  winnerModalBody.innerHTML = `恭喜 <span style="color: red;">${winner.departmentName}</span> 部門<br><strong><span style="color: blue;">${winner.name}</span></strong> 獲得 ${currentGift.name}！`;
+  winnerModalBody.innerHTML = `Congratulations <span style="color: red;">${winner.departmentName}</span> department <br><strong><span style="color: blue;">${winner.name}</span></strong> award ${currentGift.name}！`;
 
   const winnerModal = new bootstrap.Modal(
     document.getElementById("winnerModal")
